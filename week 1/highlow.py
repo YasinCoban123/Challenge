@@ -10,14 +10,14 @@ def get_random_artist():
 
 score = 0
 playing = True
+artist1 = get_random_artist()
+listeners1 = data[artist1]
 
 while playing:
-    artist1 = get_random_artist()
     artist2 = get_random_artist()
     while artist2 == artist1:
         artist2 = get_random_artist()
 
-    listeners1 = data[artist1]
     listeners2 = data[artist2]
 
     print(f"\nWho has more monthly listeners on Spotify?")
@@ -30,7 +30,9 @@ while playing:
     if guess == correct_answer:
         score += 1
         print(f"Correct! Your score: {score}")
+        artist1, listeners1 = (artist1, listeners1) if correct_answer == 'A' else (artist2, listeners2)
     else:
         print(f"Wrong! {artist1} has {listeners1}, {artist2} has {listeners2}.")
         print(f"Game over! Your final score: {score}")
         playing = False
+
