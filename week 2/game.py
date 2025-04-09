@@ -1,25 +1,21 @@
 from time import sleep
-import random
 import pygame
+import random
 
 pygame.mixer.init()
 
-
 inventory = []
 player_path = ""
-
+completed_pyramids = {
+    "Khafre": False,
+    "Menkaure": False,
+}
 
 def print_slow(txt):
     for x in txt:
         print(x, end='', flush=True)
-        sleep(0.08)
+        sleep(0.10)
     print()
-
-
-
-inventory = []
-player_path = ""
-
 
 def The_Great_pyramid():
     global inventory, player_path
@@ -55,7 +51,6 @@ def The_Great_pyramid():
             print("A ghostly scream echoes through the chamber. You run back the way you came.")
             return
 
-    # RIGHT PATH – Explorer
     elif choice == "2":
         print("\nYou brush past the thick webs and enter a narrow hallway.")
         sleep(2)
@@ -219,6 +214,7 @@ def The_Pyramid_of_Khafre():
         print("\nYou hesitate too long, and the spirits of the pyramid grow restless. A loud rumble shakes the walls!")
         return
 
+
 def continue_khafre_path():
     print("\nYou venture deeper into the pyramid, following the path that has opened before you.")
     sleep(2)
@@ -227,148 +223,128 @@ def continue_khafre_path():
     heart_of_khafre(player_path)
 
 def heart_of_khafre(path_type):
-    print("\nYou've reached the heart of the Pyramid of Khafre.")
-    sleep(2)
-
+    print("\nThe air is dense, filled with the scent of ancient dust.")
     if path_type == "khafre_spirit":
-        print("\nA voice whispers: 'You have entered the realm of death. Choose wisely, for the pact you made cannot be undone.'")
-    elif path_type == "khafre_ritual":
-        print("\nThe walls tremble. A voice speaks: 'You dare defy the gods? You shall face the consequences.'")
+        print("The spirit of Khafre's legacy calls to you, and the air grows colder with each step.")
     elif path_type == "khafre_artifacts":
-        print("\nThe air is thick with power. The artifacts you've collected pulse with energy.")
-        
-    sleep(2)
-    print("\nA massive stone door stands before you, marked with the symbol of Khafre.")
-    print("The door requires an offering to open, but you must choose carefully which artifact to use.")
-    print("Do you use the Jackal Idol, Sun Disk Fragment, or Cursed Amulet?")
-    
-    choice3 = input("> ")
+        print("The cursed amulet weighs heavily around your neck as you enter the inner sanctum.")
+    elif path_type == "khafre_ritual":
+        print("The ancient ritual is almost complete, and the walls pulse with dark energy.")
 
-    if choice3 in inventory:
-        print("\nThe door opens with a deafening roar, revealing the dark heart of the pyramid.")
-        print("You have unlocked the final chamber... but at what cost?")
-    else:
-        print("\nThe door remains sealed. It seems the wrong offering has been made.")
-        print("You must seek out the right artifact to continue your journey.")
-        return
+    sleep(2)
+    print("\nA massive, intricate door stands before you.")
+    print("It has five carved recesses, each holding a different symbol... one that matches the items you have gathered.")
+    sleep(2)
+
+    check_final_door()
+
+def check_final_door():
+    print("\nYou approach the massive door, and it responds to the artifacts you have collected.")
+    heart_of_the_pyramid(player_path)
 
 
 def The_Pyramid_of_Menkaure():
     global inventory, player_path
     
-    print("\nYou step into the shadow of the Pyramid of Menkaure, a place where darkness seems to pulse with life.")
+    print("\nYou enter the Pyramid of Menkaure, the air thick with the scent of decay and ancient dust.")
     sleep(2)
-    print("The air is thick, filled with an unnatural chill. The whispers of long-dead souls echo faintly.")
-    print("You see two paths: one leads to a dark hallway, and the other seems to be a grand chamber with flickering light.")
-    sleep(2)
+    print("The walls are adorned with carvings of animals and gods, their eyes following your every movement.")
+    print("You see two paths: one leads to a spiral staircase, and the other to a darkened chamber.\n")
 
-    choice = input("Which way do you choose?\n[1] Dark hallway\n[2] Grand chamber\n> ")
+    choice = input("Which way do you choose?\n[1] Spiral staircase\n[2] Darkened chamber\n> ")
 
     if choice == "1":
-        print("\nYou venture down the dark hallway, the walls etched with strange symbols. The whispers grow louder.")
+        print("\nYou begin climbing the spiral staircase, each step echoing in the silence.")
         sleep(2)
-        print("Suddenly, the air shifts, and you feel a cold presence behind you.")
-        print("A ghostly figure materializes in front of you, its eyes glowing a faint blue.")
-        print("It speaks in a cryptic voice: 'What price will you pay to enter the land of the dead?'")
-        
-        answer = input("Do you [1] Offer an item or [2] Decline the spirit? > ")
+        print("At the top, you find a chamber with a large stone table.")
+        print("A deep voice echoes in the air: 'You are here to claim your prize... or your curse.'")
+        sleep(2)
 
-        if answer == "1":
-            print("\nThe spirit nods, its form flickering. It grants you a passage deeper into the pyramid.")
+        choice2 = input("Do you [1] investigate the table or [2] look for another exit? > ")
+
+        if choice2 == "1":
+            print("\nYou approach the stone table and find a glowing artifact — the Obsidian Feather.")
             inventory.append("Obsidian Feather")
-            player_path = "menkaure_spirit"
+            print("\nYou take the feather and hear the soft rustling of wind. The room grows colder.")
+            player_path = "menkaure_find"
             continue_menkaure_path()
-
         else:
-            print("\nThe spirit's eyes darken. It warns you of the dangers ahead but lets you pass.")
-            player_path = "menkaure_spirit"
+            print("\nYou find a narrow passage and make your way deeper into the pyramid.")
+            player_path = "menkaure_escape"
             continue_menkaure_path()
 
     elif choice == "2":
-        print("\nYou step into a vast chamber, the walls adorned with ancient symbols and rituals.")
+        print("\nYou step into the darkened chamber, feeling the oppressive weight of ancient magic.")
         sleep(2)
-        print("At the center, a large altar is bathed in dim, flickering light. The air smells faintly of incense.")
-        print("An inscription on the altar reads: 'Only through the pact can one pass beyond death.'")
+        print("In the center, a pedestal rises from the floor, a small, golden artifact resting upon it.")
+        print("A voice whispers: 'This is the key to your survival.'")
         
-        choice2 = input("Do you [1] Investigate the altar or [2] Search the surrounding artifacts? > ")
+        choice2 = input("Do you [1] take the artifact or [2] leave it behind? > ")
 
         if choice2 == "1":
-            print("\nYou approach the altar. The moment you touch it, a surge of energy runs through you.")
-            print("A ghostly figure appears, saying: 'You now bear the mark of Menkaure's curse.'")
-            inventory.append("Obsidian Feather")
-            player_path = "menkaure_ritual"
+            print("\nYou take the artifact, and the room fills with an unsettling silence.")
+            inventory.append("Golden Artifact")
+            print("\nYou feel a strange power emanating from it as you leave the chamber.")
+            player_path = "menkaure_key"
             continue_menkaure_path()
         else:
-            print("\nYou find a hidden artifact beside the altar. It's a cursed amulet glowing with dark energy.")
-            print("It seems to resonate with the spirit world, but touching it fills you with dread.")
-            inventory.append("Cursed Amulet")
-            player_path = "menkaure_artifacts"
+            print("\nYou leave the artifact untouched. The room shifts as if disappointed.")
+            player_path = "menkaure_no_key"
             continue_menkaure_path()
 
     else:
-        print("\nYou hesitate too long, and the spirits of the pyramid grow restless. A loud rumble shakes the walls!")
+        print("\nYou hesitate too long, and the pyramid begins to rumble!")
         return
 
 
 def continue_menkaure_path():
-    print("\nYou venture deeper into the pyramid, following the path that has opened before you.")
-    sleep(2)
-    print("The air thickens, and you sense you're approaching the heart of Menkaure's dark pact.")
+    print("\nYou proceed deeper into the heart of Menkaure's pyramid.")
     sleep(2)
     heart_of_menkaure(player_path)
 
+
 def heart_of_menkaure(path_type):
-    print("\nYou've reached the heart of the Pyramid of Menkaure.")
+    print("\nThe pyramid's heart feels alive, pulsating with energy.")
+    if path_type == "menkaure_find":
+        print("You feel the presence of something ancient, watching your every move.")
+    elif path_type == "menkaure_escape":
+        print("You feel the weight of unseen eyes upon you.")
+    elif path_type == "menkaure_key":
+        print("You feel the power of the artifact growing stronger with each step.")
+    elif path_type == "menkaure_no_key":
+        print("The pyramid seems to grow more hostile, as if judging you.")
+
+    sleep(2)
+    print("\nA large door appears in front of you, its surface covered with symbols.")
     sleep(2)
 
-    if path_type == "menkaure_spirit":
-        print("\nA voice whispers: 'You have entered the realm of death. Choose wisely, for the pact you made cannot be undone.'")
-    elif path_type == "menkaure_ritual":
-        print("\nThe walls tremble. A voice speaks: 'You dare defy the gods? You shall face the consequences.'")
-    elif path_type == "menkaure_artifacts":
-        print("\nThe air is thick with power. The artifacts you've collected pulse with energy.")
-        
-    sleep(2)
-    print("\nA massive stone door stands before you, marked with the symbol of Menkaure.")
-    print("The door requires an offering to open, but you must choose carefully which artifact to use.")
-    print("Do you use the Jackal Idol, Obsidian Feather, or Cursed Amulet?")
-    
-    choice3 = input("> ")
-
-    if choice3 in inventory:
-        print("\nThe door opens with a deafening roar, revealing the dark heart of the pyramid.")
-        print("You have unlocked the final chamber... but at what cost?")
-    else:
-        print("\nThe door remains sealed. It seems the wrong offering has been made.")
-        print("You must seek out the right artifact to continue your journey.")
-        return
-
+    check_final_door() 
 
 def horror_egypt():
     pygame.mixer.music.load("backgroundmusic.mp3")
-    pygame.mixer.music.play(-1, 0.0)
-    pygame.mixer.music.set_volume(1.0)
-    print_slow("""You are Samir, an adventurous archaeologist known for uncovering the most famous and iconic finds.
-    But your next journey is like no other.
-    The pyramids, a place that contains some of the most notorious mysteries that remain unsolved, await you.
-    Press enter to continue""")
-
-    input("Press Enter to start your adventure...")
-
-    user = input("\nYou find yourself among the pyramids, but do not know which pyramid you enter first.\n[1] The Great Pyramid\n[2] The Pyramid of Khafre\n[3] The Pyramid of Menkaure\n> ")
-
-    if user == "1":
-        print_slow("\nThe long-forgotten Great Pyramid, rumored to be the tomb of a Pharaoh, calls to you.")
-        The_Great_pyramid()
-    elif user == "2":
-        print_slow("\nYou decide to enter the Pyramid of Khafre.")
-        sleep(2)
-        The_Pyramid_of_Khafre()
-    else:
-        print_slow("\nYou decide to explore the Pyramid of Menkaure.")
-        sleep(2)
-        The_Pyramid_of_Menkaure() 
-
+    pygame.mixer.music.play(-1)
+    global inventory, player_path, completed_pyramids
+    print_slow("Welcome to Horror Egypt.\n")
+    print_slow("You are Samir, an archaeologist exploring ancient Egyptian pyramids.")
+    sleep(2)
+    print_slow("Your goal is to uncover the secrets within and find your way to the final door in the Great Pyramid.\n")
+    
+    while True:
+        print("Choose your first path:")
+        print("[1] Enter The Great Pyramid")
+        print("[2] Enter The Pyramid of Khafre")
+        print("[3] Enter The Pyramid of Menkaure")
+        
+        choice = input("> ")
+        if choice == "1":
+            The_Great_pyramid()
+        elif choice == "2":
+            The_Pyramid_of_Khafre()
+        elif choice == "3":
+            The_Pyramid_of_Menkaure()
+        else:
+            print("\nInvalid choice. Try again.")
+horror_egypt()
 
 def japan():
     print_slow("""The year is 1367, and you are Nagasaki, one of the most notorious samurai.
@@ -511,5 +487,3 @@ P.S. This is a short turn-based fighting game.
                 else:
                     print_slow("\nYou have been defeated by the Mongolian boss. The Mongol raiders win this day.")
                 break
-
-def main():
