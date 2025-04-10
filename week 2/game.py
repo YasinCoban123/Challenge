@@ -344,7 +344,6 @@ def horror_egypt():
             The_Pyramid_of_Menkaure()
         else:
             print("\nInvalid choice. Try again.")
-horror_egypt()
 
 def japan():
     print_slow("""The year is 1367, and you are Nagasaki, one of the most notorious samurai.
