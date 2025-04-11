@@ -20,7 +20,7 @@ def slow_print(text, delay=0.03):
     print()  
 
 def slower_print(text):
-    slow_print(text, delay=0.06)
+    slow_print(text, delay=0.03)
 
 # Beetje lore voor de begin van het spel
 lore = """
@@ -40,15 +40,15 @@ for help from the Pope? How slim that may be. Or will the last Roman successor c
 def game_intro():
     intromelody.play() # intro liedje spelen
     slower_print(lore) 
-    intromelody.stop()
     input("\nPress ENTER to begin...")
+    intromelody.stop()
 
 # 4 keuzes van verdediging in de spel
 defense_options = {
     "1": "Archers on the wall",
     "2": "Pour boiling oil",
     "3": "Repair the wall",
-    "4": "Knights at the gates"
+    "4": "Make secret ditches around the wall"
 }
 
 # de vijf vijanden die in de spel zijn, in de tuple staat de laagste en hoogste mogelijk aanval
@@ -80,7 +80,7 @@ def defend_omer(choice, attack):
     return calculate_damage(choice == "3", attack, "Omer Pasha")
 
 def defend_sultan():
-    slow_print("Sultan Mehmet II cannot be countered... his presence is overwhelming.")  # De sultan kan niet worden tegengehouden
+    slow_print("Sultan Mehmet II cannot be defended against, he strikes furiously.")  # De sultan kan niet worden tegengehouden
     wall_damage.play()
     return 250  # returned 250 schade aan de wall
 
@@ -109,6 +109,7 @@ def constantinople():
     global wall_hp, turn  # global om de vastgestelde waardes hier te gebruiken
 
     game_intro()  # speelt de intro functie
+    bgsong.set_volume(0.7) 
     bgsong.play(-1)  # -1 zodat die in een loop blijft spelen
 
     # while loop die doorgaat totdat de muur hp 0 1
@@ -119,9 +120,11 @@ def constantinople():
         # if om te kijken of paus heeft gearegeerd
         if turn == pope_response_turn:
             if random.choice([True, False]):  # 50/50 kans dat de paus helpt
+                bgsong.stop()  # stopt de achtergrond muziek
+                win_sound.play()  # win geluid
                 slow_print("\nThe Pope has sent reinforcements! The Ottomans retreat!")
                 slow_print("The Eastern Roman Empire lives, for now...")
-                win_sound.play()  # win geluid
+                time.sleep(30)  # paar secondjes wachten voor het spel beeindigt
                 return  # return om de functie te beeindigen, en dus ook het spel
             else:
                 slow_print("\nThe Pope has refused to send help... You're on your own.")  # Paus helpt niet, spel gaat door
@@ -154,12 +157,11 @@ def constantinople():
                 wall_hp -= defend_sultan()
 
         turn += 1  # verhoogt de beurt met 1
-        time.sleep(1)  # wacht een seconde voor de volgende beurt
+        time.sleep(2)  # wacht twee secondes voor de volgende beurt
 
     # als de muur hp 0 is
     slow_print("\nThe wall has fallen. Constantinople is lost...")
     slow_print("The Eastern Roman Empire has come to an end.")
+    bgsong.stop()  # stopt de achtergrond muziek
     lose_sound.play()
-    time.sleep(4)  # paar secondjes wachten voor het spel beeindigt
-
-constantinople() 
+    time.sleep(30)  # paar secondjes wachten voor het spel beeindigt

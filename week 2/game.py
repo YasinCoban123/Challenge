@@ -321,7 +321,7 @@ def heart_of_menkaure(path_type):
     check_final_door() 
 
 def horror_egypt():
-    pygame.mixer.music.load("backgroundmusic.mp3")
+    pygame.mixer.music.load("soundw2/backgroundmusic.mp3")
     pygame.mixer.music.play(-1)
     global inventory, player_path, completed_pyramids
     print_slow("Welcome to Horror Egypt.\n")
