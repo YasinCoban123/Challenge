@@ -6,11 +6,11 @@ import pygame
 pygame.mixer.init()
 
 intromelody = pygame.mixer.Sound("soundw2/intromelody.mp3")
-bgsong = pygame.mixer.Sound("soundw2/bgsong.mp3")
+bgsong = pygame.mixer.Sound("soundw2/0414.MP3")
 newturn = pygame.mixer.Sound("soundw2/newturn.mp3")
 wall_damage = pygame.mixer.Sound("soundw2/wall_damage.mp3")
-win_sound = pygame.mixer.Sound("soundw2/footsteps.mp3")
-lose_sound = pygame.mixer.Sound("soundw2/newturn.mp3") 
+win_sound = pygame.mixer.Sound("soundw2/bgsong4.mp3")
+lose_sound = pygame.mixer.Sound("soundw2/endsong.mp3") 
 
 
 def slow_print(text, delay=0.03): 
@@ -163,5 +163,5 @@ def constantinople():
     slow_print("\nThe wall has fallen. Constantinople is lost...")
     slow_print("The Eastern Roman Empire has come to an end.")
     bgsong.stop()  # stopt de achtergrond muziek
-    lose_sound.play()
+    lose_sound.play(-1)
     time.sleep(30)  # paar secondjes wachten voor het spel beeindigt
