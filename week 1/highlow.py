@@ -4,9 +4,9 @@ import pygame
 
 pygame.mixer.init()
 
-correct_answer_sound = pygame.mixer.Sound("correct_answer.mp3")
-wrong_sound = pygame.mixer.Sound("wrong_answer.mp3")
-background_music = pygame.mixer.music.load("background.mp3")
+correct_answer_sound = pygame.mixer.Sound("newturn.mp3")
+wrong_sound = pygame.mixer.Sound("footsteps.mp3")
+background_music = pygame.mixer.music.load("bgsong.mp3")
 
 pygame.mixer.music.play(-1, 0.0)
 
