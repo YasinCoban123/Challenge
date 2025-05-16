@@ -2,8 +2,15 @@ from time import sleep
 import pygame
 import random
 
+
+pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((800, 600))
+pyramids = pygame.image.load("imagesw2/pyramids.jpeg")
+spirit = pygame.image.load("imagesw2/spirit.jpeg")
+shadow = pygame.image.load("imagesw2/shadowy_figure.jpg")
+menu = pygame.image.load("imagesw2/menu_egypt.webp")
+final_door = pygame.image.load("imagesw2/final_door.png")
 inventory = []
 player_path = ""
 completed_pyramids = {
@@ -11,10 +18,10 @@ completed_pyramids = {
     "Menkaure": False,
 }
 
-
 def print_slow(text, delay=0.03): 
     for char in text:
-        print(char, end='', flush=True)  
+        print(char, end='', flush=True)
+        pygame.event.pump()  
         sleep(delay)
     print()  
 
@@ -23,18 +30,21 @@ def The_Great_pyramid():
     print_slow("Do you:")
     print_slow("1. Enter the main chamber.")
     print_slow("2. Climb to the apex.")
+    pygame.event.pump()
     choice = input("> ")
 
     if choice == "1":
         pygame.mixer.music.load("soundw2/footsteps.mp3")
+        pygame.mixer.music.play()
         print_slow("Inside, hieroglyphs shimmer faintly. A chill runs down your spine.")
         print_slow("You find an Ancient Amulet on a pedestal.")
         inventory.append("Ancient Amulet")
     elif choice == "2":
-        print_slow("The climb is treacherous, but the view reveals the layout of the pyramid complex.")
-        pyramids = pygame.image.load("imagesw2/pyramids.jpeg")
+        screen.fill((0, 0, 0))
         screen.blit(pyramids, (0, 0))
         pygame.display.update()
+        print_slow("The climb is treacherous, but the view reveals the layout of the pyramid complex.")
+        input("Press Enter to continue...")
     else:
         print_slow("Confused by the choice, you hesitate and feel a cold presence pass through you...")
 
@@ -44,15 +54,17 @@ def The_Pyramid_of_Khafre():
     print_slow("Do you:")
     print_slow("1. Squeeze through the rubble.")
     print_slow("2. Search around the base.")
+    pygame.event.pump()
     choice = input("> ")
 
     if choice == "1":
         print_slow("You crawl into a narrow passage, your torch flickering.")
-        print_slow("Inside, a ghostly guardian appears, offering a riddle.")
-        spirit = pygame.image.load("imagesw2/spirit.jpeg")
+        screen.fill((0, 0, 0))
         screen.blit(spirit, (0, 0))
         pygame.display.update()
         pygame.mixer.music.load("soundw2/ghost_whisper.mp3")
+        pygame.mixer.music.play()
+        print_slow("Inside, a ghostly guardian appears, offering a riddle.")
         print_slow("\"I speak without a mouth and hear without ears. I have nobody, but I come alive with wind. What am I?\"")
         answer = input("Answer: ").lower()
         if "echo" in answer:
@@ -69,9 +81,11 @@ def The_Pyramid_of_Khafre():
 
 def continue_khafre_path():
     pygame.mixer.music.load("soundw2/footsteps.mp3")
+    pygame.mixer.music.play()
     print_slow("Venturing deeper into Khafre, you hear whispers echoing through the halls.")
     print_slow("A riddle is etched in blood on the wall:")
     print_slow("\"I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?\"")
+    pygame.event.pump()
     answer = input("Answer: ").lower()
     if "map" in answer:
         print_slow("A hidden door creaks open, revealing the Obsidian Dagger.")
@@ -79,17 +93,19 @@ def continue_khafre_path():
     else:
         print_slow("The walls seem to close in. You turn back before it’s too late.")
 
-
 def heart_of_khafre():
     print_slow("You reach the heart of the pyramid, where darkness clings like cobwebs.")
     print_slow("A glowing urn sits atop a stone altar.")
     print_slow("As you approach, a shadowy figure rises, eyes burning with malice.")
-    shadow = pygame.image.load("imagesw2/shadowy_figure.jpg") 
+    
+    screen.fill((0, 0, 0))
     screen.blit(shadow, (0, 0))
     pygame.display.update()
+    
     print_slow("Do you:")
     print_slow("1. Confront the figure.")
     print_slow("2. Attempt to sneak past.")
+    pygame.event.pump()
     choice = input("> ")
 
     if choice == "1":
@@ -108,9 +124,11 @@ def The_Pyramid_of_Menkaure():
     print_slow("Inside, tunnels branch in every direction.")
     print_slow("You follow the path where air is thickest with age.")
     print_slow("On a stone plinth lies a Jackal Idol. Do you take it? (yes/no)")
+    pygame.event.pump()
     choice = input("> ").lower()
     if choice == "yes":
         pygame.mixer.music.load("soundw2/pulse.mp3")
+        pygame.mixer.music.play()
         print_slow("As your fingers touch it, the walls pulse with energy.")
         inventory.append("Jackal Idol")
     else:
@@ -135,46 +153,55 @@ def check_final_door():
     if required_items.issubset(set(inventory)):
         print_slow("Each item fits perfectly into place...")
         pygame.mixer.music.load("soundw2/final_door_opening.mp3")
-        door = pygame.image.load("imagesw2/final_door.png")
-        screen.blit(door, (0, 0))
+        
+        screen.fill((0, 0, 0))
+        screen.blit(final_door, (0, 0))
+        pygame.display.update()
+
         print_slow("With a low rumble, the door opens to reveal a chamber filled with golden light.")
-        print_slow("a deep voice speaks to you and says")
-        print_slow("you have given what was taken, now take what was given")
+        print_slow("A deep voice speaks to you and says")
+        print_slow("You have given what was taken, now take what was given")
         print_slow("You have uncovered the secret of Horror Egypt.")
-        print_slow("your amazed and feel honored, but you feel like this is a trap.")
-        print_slow("do you trust it and go in or do you escape?")
-        choice = input(">  yes/no")
+        print_slow("You're amazed and feel honored, but you feel like this is a trap.")
+        print_slow("Do you trust it and go in or do you escape?")
+        pygame.event.pump()
+        choice = input("> yes/no ")
         if choice == "yes":
-            print_slow("you solved many riddles to get here.")
-            print_slow("you deserve the rewards that are inside, so you decide to go in")
+            print_slow("You solved many riddles to get here.")
+            print_slow("You deserve the rewards that are inside, so you decide to go in")
             pygame.mixer.music.load("soundw2/deep_voice.mp3")
-            print_slow("the deep voice lets out a big roar and says")
-            print_slow("you have failed the final test, greed is what has consumed you")
-            print_slow("you turn to dust and become a curse wandering inside the pyramid")
+            pygame.mixer.music.play()
+            print_slow("The deep voice lets out a big roar and says")
+            print_slow("You have failed the final test, greed is what has consumed you")
+            print_slow("You turn to dust and become a curse wandering inside the pyramid")
             print_slow("Bad Ending")
         elif choice == "no":
-            print_slow("you decide to leave the treasure and artifacts and head back home and report.")
-            print_slow("the deep voice says")
-            print_slow("Congratulations, you have succeeded mortal. you have no desire except for knowledge and gifts you one of his artifacts")
-            print_slow("you tremble and thank the voice. wondering what would have happened if you had gone in")
+            print_slow("You decide to leave the treasure and artifacts and head back home and report.")
+            print_slow("The deep voice says")
+            print_slow("Congratulations, you have succeeded mortal. You have no desire except for knowledge and gifts you one of his artifacts")
+            print_slow("You tremble and thank the voice, wondering what would have happened if you had gone in")
             print_slow("Good Ending")
     else:
         print_slow("The door remains shut. You are missing something vital...")
         print_slow("The spirits stir uneasily. You must find all five artifacts.")
 
-
 def horror_egypt():
     pygame.mixer.music.load("soundw2/backgroundmusic.mp3")
     pygame.mixer.music.play(-1)
-    menu_image = pygame.image.load("imagesw2/menu_egypt.webp")
-    screen.blit(menu_image, (0, 0))
+    screen.blit(menu, (0, 0))
     pygame.display.update()
     global inventory, player_path, completed_pyramids
     print_slow("Welcome to Horror Egypt.\n")
     print_slow("You are Samir, an archaeologist exploring ancient Egyptian pyramids.")
-    sleep(2)
     print_slow("Your goal is to uncover the secrets within and find your way to the final door in the Great Pyramid.\n")
-    
+    showing_menu = True
+    while showing_menu:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                showing_menu = False  
     while True:
         print_slow("\nChoose your path:")
         print_slow("[1] Enter The Great Pyramid")
@@ -184,6 +211,7 @@ def horror_egypt():
         print_slow("[5] View Inventory")
         print_slow("[6] Quit")
 
+        pygame.event.pump()
         choice = input("> ")
         if choice == "1":
             The_Great_pyramid()
@@ -207,8 +235,8 @@ def horror_egypt():
         else:
             print_slow("Invalid choice. Try again.")
 
-            
 horror_egypt()
+
 
 def japan():
     print_slow("""The year is 1367, and you are Nagasaki, one of the most notorious samurai.
