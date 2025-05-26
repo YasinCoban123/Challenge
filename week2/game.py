@@ -237,7 +237,6 @@ def horror_egypt():
 
 horror_egypt()
 
-
 def japan():
     print_slow("""The year is 1367, and you are Nagasaki, one of the most notorious samurai.
 The Shogun has commanded you to eliminate all of the Mongolian raiding camps and villages.
