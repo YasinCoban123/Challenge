@@ -12,7 +12,6 @@ wall_damage = pygame.mixer.Sound("soundw2/wall_damage.mp3")
 win_sound = pygame.mixer.Sound("soundw2/bgsong4.mp3")
 lose_sound = pygame.mixer.Sound("soundw2/endsong.mp3") 
 
-
 def slow_print(text, delay=0.03): 
     for char in text:
         print(char, end='', flush=True)  
@@ -51,13 +50,34 @@ defense_options = {
     "4": "Make secret ditches around the wall"
 }
 
-# de vijf vijanden die in de spel zijn, in de tuple staat de laagste en hoogste mogelijk aanval
+# Class voor elke commandant
+class Commander:
+    def __init__(self, name, attack_range, weak_defense=None):
+        self.name = name
+        self.low, self.high = attack_range
+        self.weak_defense = weak_defense
+
+    def get_attack(self):
+        return random.randint(self.low, self.high)
+
+    def calculate_damage(self, choice, attack):
+        if self.weak_defense and choice == self.weak_defense:  # als de speler de juiste verdediging kiest
+            slow_print(f"You countered {self.name} effectively!")
+            damage = int(attack * 0.5)
+        else:
+            slow_print(f"{self.name} breaks through your defenses!")  # incorrecte verdediging
+            damage = attack
+        slow_print(f"The wall takes {damage} damage.")  # laat zien hoeveel schade er is gedaan
+        wall_damage.play()
+        return damage  # geeft de schade terug
+
+# de vijf vijanden die in de spel zijn, met hun zwakke verdediging (behalve Sultan)
 commanders = {
-    "Ibrahim Pasha": (100, 200),
-    "Evrenos": (50, 100),
-    "Haim Fahri": (30, 60),
-    "Omer Pasha": (70, 120),
-    "Sultan Mehmet II": (250, 250)
+    "Ibrahim Pasha": Commander("Ibrahim Pasha", (100, 200), "4"),
+    "Evrenos": Commander("Evrenos", (50, 100), "1"),
+    "Haim Fahri": Commander("Haim Fahri", (30, 60), "2"),
+    "Omer Pasha": Commander("Omer Pasha", (70, 120), "3"),
+    "Sultan Mehmet II": Commander("Sultan Mehmet II", (250, 250))  # geen zwakte
 }
 
 # beginwaardes vastzetten
@@ -65,44 +85,12 @@ wall_hp = 1000
 turn = 1 
 pope_response_turn = random.randint(5, 10)  # 50/50 kans dat de pope helpt tussen beurt 5 en 10
 
-# vijf functies voor elke commandant, die de verdediging van de muur berekenen
-# elke commandant heeft zijn zwakke punt, behalve de sultan
-def defend_ibrahim(choice, attack):
-    return calculate_damage(choice == "4", attack, "Ibrahim Pasha")
-
-def defend_evrenos(choice, attack):
-    return calculate_damage(choice == "1", attack, "Evrenos")
-
-def defend_haim(choice, attack):
-    return calculate_damage(choice == "2", attack, "Haim Fahri")
-
-def defend_omer(choice, attack):
-    return calculate_damage(choice == "3", attack, "Omer Pasha")
-
-def defend_sultan():
-    slow_print("Sultan Mehmet II cannot be defended against, he strikes furiously.")  # De sultan kan niet worden tegengehouden
-    wall_damage.play()
-    return 250  # returned 250 schade aan de wall
-
-# hier berekenen hoeveel schade er gaat worden gemaakt tegen de muur
-def calculate_damage(correct, attack, name):
-    if correct:  # als je de correcte verdediging kiest, krijg je minder schade
-        slow_print(f"You countered {name} effectively!")
-        damage = int(attack * 0.5)
-    else:
-        slow_print(f"{name} breaks through your defenses!")  # dus als je de incorrecte verdediging kiest
-        damage = attack  # hier krijg je de schade die de commandant doet
-    slow_print(f"The wall takes {damage} damage.")  # laat zien hoeveel schade er is gedaan
-    wall_damage.play()
-    return damage  # geeft de schade terug
-
 # functie die een random commandant pakt uit de dict
 def get_commander():
     name = random.choice(list(commanders.keys()))  # pakt een random naam uit de dict
-    low = commanders[name][0]  # pakt de eerte waarde uit de tuple
-    high = commanders[name][1]  # pakt de tweede waarde uit de tuple
-    attack = random.randint(low, high)  # gebruikt random om te kiezen tussen de twee waardes
-    return name, attack # geeft de naam en de aanval terug
+    commander = commanders[name]
+    attack = commander.get_attack()  # gebruikt random om te kiezen tussen de twee waardes
+    return commander, attack  # geeft de commandant en aanval terug
 
 # main game
 def constantinople():
@@ -112,10 +100,10 @@ def constantinople():
     bgsong.set_volume(0.7) 
     bgsong.play(-1)  # -1 zodat die in een loop blijft spelen
 
-    # while loop die doorgaat totdat de muur hp 0 1
+    # while loop die doorgaat totdat de muur hp 0 is
     while wall_hp > 0:
         slow_print(f"\nTurn {turn}")  # laat de huidige beurt zien, /n voor een nieuwe regel
-        slow_print(f"Wall HP: {wall_hp}")  #  laat de muur hp zien
+        slow_print(f"Wall HP: {wall_hp}")  # laat de muur hp zien
 
         # if om te kijken of paus heeft gearegeerd
         if turn == pope_response_turn:
@@ -129,8 +117,8 @@ def constantinople():
             else:
                 slow_print("\nThe Pope has refused to send help... You're on your own.")  # Paus helpt niet, spel gaat door
 
-        name, attack = get_commander()  # pakt de random commandant en aanval
-        slow_print(f"\nOttoman commander: {name} is attacking!")  # laat zien wie er aanvalt
+        commander, attack = get_commander()  # pakt de random commandant en aanval
+        slow_print(f"\nOttoman commander: {commander.name} is attacking!")  # laat zien wie er aanvalt
         slow_print("Choose your defense:")  # vraagt je om een keuze
 
         # verschillende opties voor verdediging, in een for loop gezet omdat het makkelijker is om te lezen
@@ -144,17 +132,13 @@ def constantinople():
         if choice not in defense_options:
             slow_print("Invalid choice! You lose this turn.")  # als je niet tussen 1 en 4 kiest, krijg je
             wall_hp -= attack  # de schade die de commandant doet
-        else: # als je wel tussen 1 en 4 kiest, dan krijg je de schade die werd berekend
-            if name == "Ibrahim Pasha":
-                wall_hp -= defend_ibrahim(choice, attack)
-            elif name == "Evrenos":
-                wall_hp -= defend_evrenos(choice, attack)
-            elif name == "Haim Fahri":
-                wall_hp -= defend_haim(choice, attack)
-            elif name == "Omer Pasha":
-                wall_hp -= defend_omer(choice, attack)
-            elif name == "Sultan Mehmet II":
-                wall_hp -= defend_sultan()
+        else:  # als je wel tussen 1 en 4 kiest, dan krijg je de schade die werd berekend
+            if commander.name == "Sultan Mehmet II":
+                slow_print("Sultan Mehmet II cannot be defended against, he strikes furiously.")  # De sultan kan niet worden tegengehouden
+                wall_damage.play()
+                wall_hp -= 250  # returned 250 schade aan de wall
+            else:
+                wall_hp -= commander.calculate_damage(choice, attack)
 
         turn += 1  # verhoogt de beurt met 1
         time.sleep(2)  # wacht twee secondes voor de volgende beurt

@@ -235,7 +235,6 @@ def horror_egypt():
         else:
             print_slow("Invalid choice. Try again.")
 
-horror_egypt()
 
 def japan():
     print_slow("""The year is 1367, and you are Nagasaki, one of the most notorious samurai.
